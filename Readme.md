@@ -10,4 +10,4 @@ This program was created with C# and Core .NET so you only need to compile it an
 
 The folder AutomataEquivalence/Examples contains examples of matrix. If you run the program in all of those examples you can get their value of equivalence or not:
 
-![Equivalence Examples]()
+![Equivalence Examples](https://github.com/lima1756/AutomataEquivalence/blob/master/ReadmeImgs/1.png)
