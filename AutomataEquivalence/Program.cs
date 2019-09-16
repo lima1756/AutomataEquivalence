@@ -37,8 +37,8 @@ namespace AutomataEquivalence
                 return;
             }
 
-            List<Tuple<int, int>> visited = new List<Tuple<int, int>>();
-            Queue<Tuple<int, int>> toVisit = new Queue<Tuple<int, int>>();
+            var visited = new List<Tuple<int, int>>();
+            var toVisit = new Queue<Tuple<int, int>>();
             toVisit.Enqueue(Tuple.Create(m1.Start(), m2.Start()));
             while (toVisit.Count > 0)
             {

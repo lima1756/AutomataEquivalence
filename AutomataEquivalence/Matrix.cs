@@ -7,27 +7,26 @@ namespace AutomataEquivalence
     class Matrix
     {
         private static int POZO = -1;
-        private readonly int[][] matrix;
-        private readonly List<int> start;
-        private readonly List<int> end;
-        private string[] _transitions;
+        private readonly int[][] _matrix;
+        private readonly List<int> _start;
+        private readonly List<int> _end;
 
         private Matrix()
         {
-            start = new List<int>();
-            end = new List<int>();
+            _start = new List<int>();
+            _end = new List<int>();
         }
-        public Matrix(string[] lines)
+        public Matrix(IReadOnlyList<string> lines)
         {
-            if (lines.Length <= 0) return;
-            matrix = new int[lines.Length][];
-            start = new List<int>();
-            end = new List<int>();
-            _transitions = lines[0].Split(',');
-            for (var i = 1; i < lines.Length; i++)
+            if (lines.Count <= 0) return;
+            _matrix = new int[lines.Count][];
+            _start = new List<int>();
+            _end = new List<int>();
+            Transitions = lines[0].Split(',');
+            for (var i = 1; i < lines.Count; i++)
             {
                 var values = lines[i].Split(',');
-                matrix[i-1] = new int[values.Length];
+                _matrix[i-1] = new int[values.Length];
                 for (var j = 0; j < values.Length; j++)
                 {
                     var index = 0;
@@ -35,16 +34,16 @@ namespace AutomataEquivalence
                     {
                         if (values[j][0] == '>' || (values[j].Length > 1 && values[j][1] == '>'))
                         {
-                            start.Add(i-1);
+                            _start.Add(i-1);
                             index++;
                         }
-                        else if (values[j][0] == '*' || (values[j].Length > 1 && values[j][1] == '*'))
+                        if (values[j][0] == '*' || (values[j].Length > 1 && values[j][1] == '*'))
                         {
-                            end.Add(i-1);
+                            _end.Add(i-1);
                             index++;
                         }
                     }
-                    matrix[i - 1][j] = values[j].Substring(index).Length > 0 ? int.Parse(values[j].Substring(index)) : POZO;
+                    _matrix[i - 1][j] = values[j].Substring(index).Length > 0 ? int.Parse(values[j].Substring(index)) : POZO;
                 }
             }
 
@@ -52,46 +51,44 @@ namespace AutomataEquivalence
 
         public int Height()
         {
-            return this.matrix.Length;
+            return this._matrix.Length;
         }
 
         public int Width()
         {
-            return this._transitions.Length;
+            return this.Transitions.Length;
         }
 
         public bool CompareSize(Matrix m)
         {
-            return this.Height() == m.Height() && this.Width() == m.Width();
+            return this.Width() == m.Width();
         }
 
-        public int[] this[int i] => this.matrix[i];
+        public int[] this[int i] => this._matrix[i];
 
         public StateType GetStateType(int node)
         {
-            bool start = this.start.Contains(node);
-            bool end = this.end.Contains(node);
+            var start = this._start.Contains(node);
+            var end = this._end.Contains(node);
             if (start && end)
                 return StateType.StartFinal;
             if (start)
                 return StateType.Start;
-            if (end)
-                return StateType.Final;
-            return StateType.Intermediate;
+            return end ? StateType.Final : StateType.Intermediate;
         }
 
         public int Start()
         {
-            return this.start[0];
+            return this._start[0];
         }
 
-        public string[] Transitions => this._transitions;
+        public string[] Transitions { get; }
 
         public int GetTransitionPosition(string transition)
         {
-            for (var i = 0; i < _transitions.Length; i++)
+            for (var i = 0; i < Transitions.Length; i++)
             {
-                if (_transitions[i] == transition)
+                if (Transitions[i] == transition)
                     return i;
             }
 
