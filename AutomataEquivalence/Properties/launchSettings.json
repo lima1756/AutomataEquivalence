@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AutomataEquivalence": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../Examples/Equal/matrix1.csv ../../../Examples/Equal/matrix2.csv"
+    }
+  }
+}
